@@ -42,32 +42,33 @@ This Inventory Management System provides:
 2. **Navigate the project directory**     
      ```bash
     cd Inventory-Management-System
-3. **Install Dependencies
+3. **Install Dependencies**
    ```bash
     composer install
-4. **Create and Configure Environment File
+4. **Create and Configure Environment File**    
    ```bash
     cp .env.example .env
-5. **Generate Application Key
+5. **Generate Application Key**
    ```bash
    php artisan key:generate
-6. **Run Migrations
+6. **Run Migrations**
    ```bash
    php artisan migrate
-7. **Run Server
+7. **Run Server**
    ```bash
    php artisan serve
 
 The app will be available at: http://localhost:8000
 
-8. **API Authentication
+8. **API Authentication**
 Use Laravel Sanctum / Passport / JWT tokens to authenticate API requests.
 
-**Contact
-Contact 📬
+**Contact**
 
 LinkedIn: Abenezer Sileshi
 
 Gmail: abinesilew@gmail.com
+
+Telegram: @Aben14i
 
 Telegram: @Aben14i
