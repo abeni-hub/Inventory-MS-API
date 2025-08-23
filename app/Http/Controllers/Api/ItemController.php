@@ -12,11 +12,24 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $items = Item::all();
-        return response()->json($items);
+   public function index(Request $request)
+{
+    $query = Item::query();
+
+    // Search by name or description
+    if ($request->has('search')) {
+        $search = $request->input('search');
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%$search%")
+              ->orWhere('description', 'like', "%$search%");
+        });
     }
+
+    // Pagination (default 10 per page)
+    $items = $query->paginate($request->input('per_page', 10));
+
+    return response()->json($items);
+}
 
     /**
      * Show the form for creating a new resource.
@@ -87,4 +100,45 @@ class ItemController extends Controller
         $item->delete();
         return response()->json(['message' => 'Item deleted']);
     }
+    public function addStock(Request $request, $id)
+{
+    $item = Item::find($id);
+    if (!$item) {
+        return response()->json(['message' => 'Item not found'], 404);
+    }
+
+    $validator = Validator::make($request->all(), [
+        'quantity' => 'required|integer|min:1',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
+    }
+
+    $item->quantity += $request->quantity;
+    $item->save();
+
+    return response()->json($item);
+}
+
+public function removeStock(Request $request, $id)
+{
+    $item = Item::find($id);
+    if (!$item) {
+        return response()->json(['message' => 'Item not found'], 404);
+    }
+
+    $validator = Validator::make($request->all(), [
+        'quantity' => 'required|integer|min:1|max:' . $item->quantity,
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
+    }
+
+    $item->quantity -= $request->quantity;
+    $item->save();
+
+    return response()->json($item);
+}
 }
