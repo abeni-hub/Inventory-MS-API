@@ -10,13 +10,12 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('adjustments', function (Blueprint $table) {
+    {Schema::create('sales_orders', function (Blueprint $table) {
     $table->id();
-    $table->foreignId('warehouse_id')->constrained()->onDelete('cascade');
-    $table->foreignId('item_id')->constrained()->onDelete('cascade');
-    $table->integer('quantity_adjusted');
-    $table->text('reason')->nullable();
+    $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+    $table->date('order_date');
+    $table->enum('status', ['pending', 'shipped', 'cancelled'])->default('pending');
+    $table->decimal('total_amount', 10, 2)->default(0.00);
     $table->timestamps();
 });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('adjustments');
+        Schema::dropIfExists('sales_orders');
     }
 };
